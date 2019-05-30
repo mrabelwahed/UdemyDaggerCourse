@@ -50,7 +50,6 @@ class PokemonListFragment : Fragment() , OnClickListener{
 
     fun getPokemonDetails(position:Int){
         (activity as MainActivity).getPokemonDetails(position)
-        //(activity as MainActivity).observePokemonDetails()
     }
 
 

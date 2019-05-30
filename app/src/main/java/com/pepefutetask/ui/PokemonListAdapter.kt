@@ -20,14 +20,16 @@ class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.PokemonViewHo
     override fun getItemCount() = pokemonList.size
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
-        holder.itemView.pokemonName.text = pokemonList.get(position).name
-        holder.itemView.setOnClickListener {
+        holder.pokemonName.text = pokemonList.get(position).name
+        holder.pokemonName.setOnClickListener {
          listener.onClick(position,it)
         }
     }
 
 
-    class  PokemonViewHolder(view: View) : RecyclerView.ViewHolder(view){}
+    class  PokemonViewHolder(view: View) : RecyclerView.ViewHolder(view){
+        val pokemonName = view.pokemonName
+    }
 
     fun addPokmons(list: ArrayList<Pokemon>){
         pokemonList.clear()

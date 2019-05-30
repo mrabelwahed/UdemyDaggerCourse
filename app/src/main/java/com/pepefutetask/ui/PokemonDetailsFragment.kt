@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer
 import com.pepefutetask.POKEMON_DETAILS_KEY
 import com.pepefutetask.R
 import com.pepefutetask.data.PokemonDetails
-import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_pokemon_details.*
 
