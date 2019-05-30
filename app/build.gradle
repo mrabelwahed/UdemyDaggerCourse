@@ -25,7 +25,7 @@ android {
 
 dependencies {
     def lifecycle_version = "1.1.1"
-    def dagger_version = "2.15"
+    def dagger_version = "2.22"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
@@ -49,8 +49,10 @@ dependencies {
     // rxjava2 adaptar
     // implementation 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
     // live data with view model
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     implementation "com.google.dagger:dagger:$dagger_version"
-    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }
