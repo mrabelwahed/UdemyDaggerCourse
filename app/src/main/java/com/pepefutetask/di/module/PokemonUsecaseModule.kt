@@ -1,5 +1,6 @@
 package com.pepefutetask.di.module
 
+import com.pepefutetask.di.scope.AppScope
 import com.pepefutetask.domain.PokemonUsecase
 import com.pepefutetask.repository.PokemonRepository
 import dagger.Module
@@ -8,7 +9,7 @@ import javax.inject.Singleton
 
 @Module
 class PokemonUsecaseModule {
+    @AppScope
     @Provides
-    @Singleton
     fun provideFeedUseCase(repository :PokemonRepository) = PokemonUsecase(repository)
 }

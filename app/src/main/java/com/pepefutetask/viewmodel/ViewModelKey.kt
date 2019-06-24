@@ -1,4 +1,4 @@
-package com.pepefutetask.di
+package com.pepefutetask.viewmodel
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey

@@ -2,6 +2,7 @@ package com.pepefutetask.di.module
 
 import com.pepefutetask.BASE_URL
 import com.pepefutetask.TIMEOUT_REQUEST
+import com.pepefutetask.di.scope.AppScope
 import com.pepefutetask.network.PokemonApi
 import dagger.Module
 import dagger.Provides
@@ -15,6 +16,7 @@ import javax.inject.Singleton
 
 @Module
 class NetworkModule {
+    @AppScope
     @Provides
     fun provideHttpLogging(): HttpLoggingInterceptor {
         val loggingInterceptor = HttpLoggingInterceptor()
@@ -22,7 +24,7 @@ class NetworkModule {
         return loggingInterceptor
     }
 
-
+    @AppScope
     @Provides
     fun provideOkhttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient =
         OkHttpClient.Builder()
@@ -32,7 +34,7 @@ class NetworkModule {
             .writeTimeout(TIMEOUT_REQUEST, TimeUnit.SECONDS)
             .build()
 
-
+    @AppScope
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient) =
         Retrofit.Builder().client(okHttpClient)
@@ -40,8 +42,8 @@ class NetworkModule {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 
 
+    @AppScope
     @Provides
-    @Singleton
     fun provideFeedService(builder: Retrofit.Builder) =
         builder.baseUrl(BASE_URL).build().create(PokemonApi::class.java)
 }

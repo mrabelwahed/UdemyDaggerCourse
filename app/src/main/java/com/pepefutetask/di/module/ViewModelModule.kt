@@ -2,8 +2,9 @@ package com.pepefutetask.di.module
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.pepefutetask.di.ViewModelKey
-import com.pepefutetask.viewmodel.PokeMonViewModel
+import com.pepefutetask.viewmodel.ViewModelKey
+import com.pepefutetask.viewmodel.PokeMonListViewModel
+import com.pepefutetask.viewmodel.PokemonDetailsViewModel
 import com.pepefutetask.viewmodel.ViewModelFactory
 import dagger.Binds
 import dagger.Module
@@ -16,7 +17,12 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(PokeMonViewModel::class)
-    internal abstract fun postMainViewModel(viewModel: PokeMonViewModel): ViewModel
+    @ViewModelKey(PokeMonListViewModel::class)
+    internal abstract fun bindPokemonListViewModel(viewModel: PokeMonListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PokemonDetailsViewModel::class)
+    internal abstract fun bindPokemonDetailsViewModel(viewModel: PokemonDetailsViewModel): ViewModel
 
 }

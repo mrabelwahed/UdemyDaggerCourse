@@ -1,46 +1,53 @@
 package com.pepefutetask.ui
 
+import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.pepefutetask.POKEMON_DETAILS_KEY
 import com.pepefutetask.R
 import com.pepefutetask.data.PokemonDetails
+import com.pepefutetask.viewmodel.PokemonDetailsViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_pokemon_details.*
 
-class PokemonDetailsFragment : Fragment() {
+class PokemonDetailsFragment : BaseFragment() {
+    private lateinit var pokemonDetailsViewModel: PokemonDetailsViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_pokemon_details, container, false)
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        pokemonDetailsViewModel = ViewModelProviders.of(this, viewModelFactory)[PokemonDetailsViewModel::class.java]
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id = arguments?.getInt(POKEMON_DETAILS_KEY)
-        id?.let {  getPokemonDetails(it) }
+        id?.let { getPokemonDetails(it) }
     }
+
 
     fun getPokemonDetails(id: Int) {
         if (isVisible) {
-            (activity as MainActivity).getViewModel().getPokemonDetails(id)
+            pokemonDetailsViewModel.getPokemonDetails(id)
             observePokemonDetails()
         }
 
     }
 
     fun observePokemonDetails() {
-        (activity as MainActivity).getViewModel().getLivePokemonDetails().observe(this, Observer {
+        pokemonDetailsViewModel.getLivePokemonDetails().observe(this, Observer {
             setData(it)
         })
     }
 
     fun setData(response: PokemonDetails?) {
-            Picasso.get().load(response?.sprites?.front_default).into(pokemonImage)
-            pokemonWeight.text = "Weight is :".plus(response?.weight.toString())
-            pokemonHeight.text = "Height is :".plus(response?.height.toString())
+        Picasso.get().load(response?.sprites?.front_default).into(pokemonImage)
+        pokemonWeight.text = "Weight is :".plus(response?.weight.toString())
+        pokemonHeight.text = "Height is :".plus(response?.height.toString())
     }
+
+    override fun getLayoutById() = R.layout.fragment_pokemon_details
+
 }
