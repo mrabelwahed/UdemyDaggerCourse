@@ -7,11 +7,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.pepefutetask.BaseApp
 import com.pepefutetask.POKEMON_DETAILS_KEY
 import com.pepefutetask.R
 import com.pepefutetask.data.PokemonResponse
+import com.pepefutetask.di.module.PokemonListViewModelModule
 import com.pepefutetask.viewmodel.PokeMonListViewModel
+import com.pepefutetask.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_pokemon_list.*
+import javax.inject.Inject
 
 class PokemonListFragment : BaseFragment(), OnClickListener {
     private val pokemonDetailsFragment = PokemonDetailsFragment()
@@ -19,9 +23,14 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
     private lateinit var pokeMonListViewModel: PokeMonListViewModel
     val pokadapter = PokemonListAdapter()
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
+        ( activity?.applicationContext as BaseApp).appComponent
+            .newPokemonLisComponent().inject(this)
         pokeMonListViewModel = ViewModelProviders.of(this,viewModelFactory)[PokeMonListViewModel::class.java]
     }
 
