@@ -2,11 +2,11 @@ package com.pokemon.di.component
 
 import com.pokemon.di.module.PokemonDetailsViewModelModule
 import com.pokemon.di.module.ViewModelFactoryModule
-import com.pokemon.di.scope.ActivityScope
+import com.pokemon.di.scope.FragmentScope
 import com.pokemon.ui.PokemonDetailsFragment
 import dagger.Subcomponent
 
-@ActivityScope
+@FragmentScope
 @Subcomponent(
     modules = [
         ViewModelFactoryModule::class,
