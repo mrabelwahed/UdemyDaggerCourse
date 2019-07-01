@@ -2,6 +2,8 @@ package com.pokemon.di.component
 
 import com.pokemon.di.module.*
 import com.pokemon.di.scope.AppScope
+import com.pokemon.di.subcomponent.PokemonDetailsComponent
+import com.pokemon.di.subcomponent.PokemonListComponent
 import dagger.Component
 
 @AppScope
@@ -13,6 +15,6 @@ import dagger.Component
     ]
 )
 interface AppComponent {
-    fun newPokemonLisComponent():PokemonListComponent
-    fun newPokemonDetailsComponent():PokemonDetailsComponent
+    fun newPokemonLisComponent(): PokemonListComponent
+    fun newPokemonDetailsComponent(): PokemonDetailsComponent
 }

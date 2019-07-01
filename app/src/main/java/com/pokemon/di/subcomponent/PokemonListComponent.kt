@@ -1,4 +1,4 @@
-package com.pokemon.di.component
+package com.pokemon.di.subcomponent
 
 import com.pokemon.di.module.PokemonListViewModelModule
 import com.pokemon.di.module.ViewModelFactoryModule
