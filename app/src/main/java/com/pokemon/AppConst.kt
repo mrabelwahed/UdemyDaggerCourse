@@ -1,6 +1,6 @@
 package com.pokemon
 
-const val BASE_URL = "http://pokeapi.co/"
+const val BASE_URL = "https://pokeapi.co/"
 
 const val SUBCRIBER_ON = "SubscribeOn"
 
