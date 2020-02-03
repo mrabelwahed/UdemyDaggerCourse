@@ -2,6 +2,7 @@ package com.pokemon.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -9,6 +10,7 @@ import com.pokemon.BaseApp
 import com.pokemon.POKEMON_DETAILS_KEY
 import com.pokemon.R
 import com.pokemon.data.PokemonDetails
+import com.pokemon.ui.viewstate.ServerDataState
 import com.pokemon.viewmodel.PokemonDetailsViewModel
 import com.pokemon.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
@@ -45,8 +47,15 @@ class PokemonDetailsFragment : BaseFragment() {
 
     fun observePokemonDetails() {
         pokemonDetailsViewModel.getLivePokemonDetails().observe(this, Observer {
-            setData(it)
+            when(it){
+                is ServerDataState.success<*> -> setData(it.item as PokemonDetails)
+                is ServerDataState.error -> setError(it.message)
+            }
         })
+    }
+
+    private fun setError(message: String?) {
+     Log.e("Details-error",message)
     }
 
     fun setData(response: PokemonDetails?) {

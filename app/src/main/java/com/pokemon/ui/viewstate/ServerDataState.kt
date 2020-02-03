@@ -1,8 +1,10 @@
 package com.pokemon.ui.viewstate
 
-sealed class ServerData {
-    object loading : ServerData()
-    object empty : ServerData()
-    data class error(val message: String?) : ServerData()
-    data class success<T>(val item: T) : ServerData()
+import com.pokemon.data.PokemonResponse
+
+sealed class ServerDataState {
+    object loading : ServerDataState()
+    object empty : ServerDataState()
+    data class error(val message: String?) : ServerDataState()
+    data class success<T>(val item: T) : ServerDataState()
 }

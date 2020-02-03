@@ -2,6 +2,7 @@ package com.pokemon.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -11,6 +12,7 @@ import com.pokemon.BaseApp
 import com.pokemon.POKEMON_DETAILS_KEY
 import com.pokemon.R
 import com.pokemon.data.PokemonResponse
+import com.pokemon.ui.viewstate.ServerDataState
 import com.pokemon.viewmodel.PokeMonListViewModel
 import com.pokemon.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_pokemon_list.*
@@ -18,9 +20,9 @@ import javax.inject.Inject
 
 class PokemonListFragment : BaseFragment(), OnClickListener {
     private val pokemonDetailsFragment = PokemonDetailsFragment()
-
     private lateinit var pokeMonListViewModel: PokeMonListViewModel
-    val pokadapter = PokemonListAdapter()
+    @Inject
+    lateinit var  pokemonListAdapter:PokemonListAdapter
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -38,24 +40,24 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
         initUI(view)
     }
 
-    fun setupView(view: View) {
+    private fun setupView(view: View) {
         val linearLayoutManager = LinearLayoutManager(context)
-        pokadapter.setClickListener(this)
+        pokemonListAdapter.setClickListener(this)
         pokemonList.apply {
             layoutManager = linearLayoutManager
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-            adapter = pokadapter
+            adapter = pokemonListAdapter
         }
 
     }
 
-    fun getPokemonListData() {
+    private  fun getPokemonListData() {
         pokeMonListViewModel.getPokemonList()
         observePokemonList()
     }
 
-    fun setData(response: PokemonResponse?) {
-        response?.results?.let { pokadapter.addPokmons(it) }
+    private fun setData(response: PokemonResponse?) {
+        response?.results?.let { pokemonListAdapter.addPokmons(it) }
     }
 
 
@@ -65,10 +67,18 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
         getPokemonDetails(position+1)
     }
 
-    fun observePokemonList() {
+    private fun observePokemonList() {
         pokeMonListViewModel.getLivePokemonList().observe(this, Observer {
-            setData(it)
+            when(it){
+                is ServerDataState.success<*> -> setData(it.item as PokemonResponse?)
+                is ServerDataState.error -> setError(it.message)
+            }
+
         })
+    }
+
+    private fun setError(message: String?) {
+      Log.e("ERROR",message)
     }
 
 
@@ -76,13 +86,13 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
         return R.layout.fragment_pokemon_list
     }
 
-     fun initUI(view: View) {
+     private fun initUI(view: View) {
         setupView(view)
         getPokemonListData()
     }
 
 
-    fun getPokemonDetails(id: Int) {
+    private fun getPokemonDetails(id: Int) {
         val bundle = Bundle()
         bundle.putInt(POKEMON_DETAILS_KEY,id)
         pokemonDetailsFragment.arguments = bundle
