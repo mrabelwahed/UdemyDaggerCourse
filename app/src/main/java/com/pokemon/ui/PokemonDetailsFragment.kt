@@ -48,8 +48,8 @@ class PokemonDetailsFragment : BaseFragment() {
     fun observePokemonDetails() {
         pokemonDetailsViewModel.getLivePokemonDetails().observe(this, Observer {
             when(it){
-                is ServerDataState.success<*> -> setData(it.item as PokemonDetails)
-                is ServerDataState.error -> setError(it.message)
+                is ServerDataState.Success<*> -> setData(it.item as PokemonDetails)
+                is ServerDataState.Error -> setError(it.message)
             }
         })
     }

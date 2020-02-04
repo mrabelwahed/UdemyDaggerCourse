@@ -16,9 +16,6 @@ import com.pokemon.data.PokemonResponse
 import com.pokemon.ui.viewstate.ServerDataState
 import com.pokemon.viewmodel.PokeMonListViewModel
 import com.pokemon.viewmodel.ViewModelFactory
-import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.processors.PublishProcessor
 import kotlinx.android.synthetic.main.fragment_pokemon_list.*
 import javax.inject.Inject
 
@@ -26,21 +23,16 @@ import javax.inject.Inject
 class PokemonListFragment : BaseFragment(), OnClickListener {
     private val pokemonDetailsFragment = PokemonDetailsFragment()
     private lateinit var pokeMonListViewModel: PokeMonListViewModel
-    @Inject
-    lateinit var pokemonListAdapter: PokemonListAdapter
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    val paginator = PublishProcessor.create<Int>()
-
     private var totalItemCount = 0
     private var lastVisibleItem = 0
     private var loading = false
     private lateinit var linearLayoutManager: LinearLayoutManager
     private val VISIBLE_THRESHOLD = 1
-    //private var loadMore = true
     private var offest = 0
+    @Inject
+    lateinit var pokemonListAdapter: PokemonListAdapter
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -66,11 +58,6 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
 
     }
 
-    private fun getPokemonListData() {
-        pokeMonListViewModel.getPokemonList()
-        observePokemonList()
-    }
-
     private fun setData(response: PokemonResponse?) {
         response?.results?.let { pokemonListAdapter.addPokmons(it) }
     }
@@ -82,10 +69,23 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
     }
 
     private fun observePokemonList() {
-        pokeMonListViewModel.getLivePokemonList().observe(this, Observer {
+        pokeMonListViewModel.livePokemonData.observe(this, Observer {
             when (it) {
-                is ServerDataState.success<*> -> setData(it.item as PokemonResponse?)
-                is ServerDataState.error -> setError(it.message)
+                is ServerDataState.Success<*> -> {
+                    loading = false
+                    pokemonListAdapter.removeLoadingData()
+                    setData(it.item as PokemonResponse?)
+                }
+                is ServerDataState.Error -> {
+                    loading = false
+                    pokemonListAdapter.removeLoadingData()
+                    setError(it.message)
+                }
+
+                is ServerDataState.Loading ->{
+                    loading = true
+                    pokemonListAdapter.addLoadingData()
+                }
             }
 
         })
@@ -102,9 +102,9 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
 
     private fun initUI() {
         setupView()
-        initPagination()
+        pokeMonListViewModel.initPagination()
         setupLoadMoreListener()
-        //getPokemonListData()
+        observePokemonList()
     }
 
     private fun setupLoadMoreListener() {
@@ -115,38 +115,13 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
                 if (!loading && totalItemCount <= lastVisibleItem + VISIBLE_THRESHOLD) {
                     offest += 20
-                   // if (loadMore)
-                    paginator.onNext(offest)
+                    pokeMonListViewModel.nextPage(offest)
                     loading = true
                 }
             }
         })
 
     }
-
-    private fun initPagination(){
-        val disposable = paginator
-            .doOnNext { offest ->
-                loading = true
-                pokemonListAdapter.addLoadingData()
-
-            }
-            .concatMap { offest -> dataFromNetwork(offest) }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe{response->
-                loading = false
-                pokemonListAdapter.removeLoadingData()
-                response?.results?.let { pokemonListAdapter.addPokmons(it) }
-
-            }
-
-        paginator.onNext(offest)
-    }
-
-    private fun dataFromNetwork(offest: Int): Flowable<PokemonResponse> {
-        return pokeMonListViewModel.getItems(offest)
-    }
-
 
     private fun getPokemonDetails(id: Int) {
         val bundle = Bundle()
