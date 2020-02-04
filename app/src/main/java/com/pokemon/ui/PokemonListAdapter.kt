@@ -10,6 +10,7 @@ import com.pokemon.R
 import com.pokemon.data.Pokemon
 import kotlinx.android.synthetic.main.item_list.view.*
 import kotlinx.android.synthetic.main.item_loading.view.*
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 class PokemonListAdapter @Inject constructor() :
@@ -18,20 +19,25 @@ class PokemonListAdapter @Inject constructor() :
     private val pokemonList = ArrayList<Pokemon>()
     lateinit var listener: OnClickListener
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
-        val view = if (viewType == MAIN_ITEM)
-            LayoutInflater.from(parent.context).inflate(R.layout.item_list, null)
-        else
-            LayoutInflater.from(parent.context).inflate(R.layout.item_loading, null)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        return PokemonViewHolder(view)
+        when(viewType){
+            MAIN_ITEM -> {
+                val view  =  LayoutInflater.from(parent.context).inflate(R.layout.item_list, null)
+                return PokemonViewHolder(view) }
+            LOADING_ITEM -> {
+            val view  =  LayoutInflater.from(parent.context).inflate(R.layout.item_loading, null)
+            return LoadingViewHolder(view) }
+
+        }
+       throw RuntimeException("not handled type")
     }
 
     override fun getItemCount() = pokemonList.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is PokemonViewHolder){
-            holder.pokemonName.text = pokemonList.get(position).name
+            holder.pokemonName.text = pokemonList[position].name
             holder.pokemonName.setOnClickListener {
                 listener.onClick(position, it)
             }
@@ -42,7 +48,7 @@ class PokemonListAdapter @Inject constructor() :
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (pokemonList[position] == null)
+        return if (pokemonList[position].type == LOADING_ITEM)
             LOADING_ITEM
         else
             MAIN_ITEM
@@ -59,9 +65,18 @@ class PokemonListAdapter @Inject constructor() :
     }
 
     fun addPokmons(list: ArrayList<Pokemon>) {
-        pokemonList.clear()
         pokemonList.addAll(list)
         notifyDataSetChanged()
+    }
+
+    fun addLoadingData(){
+        pokemonList.add(Pokemon("loading","fake",1));
+        notifyItemInserted(pokemonList.size - 1);
+    }
+
+    fun removeLoadingData(){
+        pokemonList.remove(pokemonList[pokemonList.size - 1])
+        notifyItemRemoved(pokemonList.size-1)
     }
 
     fun setClickListener(listener: OnClickListener) {

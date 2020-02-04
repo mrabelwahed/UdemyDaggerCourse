@@ -22,6 +22,8 @@ class PokeMonListViewModel @Inject constructor(private val usecase: PokemonUseca
         compositeDisposable.add(disposable)
     }
 
+    fun getItems(offest : Int) = usecase.getPokemonList(offest)
+
 
 
     fun getLivePokemonList() = viewState
