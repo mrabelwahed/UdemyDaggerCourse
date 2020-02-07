@@ -1,42 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:gravity="center"
-              android:padding="15dp"
-              android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/detailsView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="15dp">
 
     <ImageView
             android:id="@+id/pokemonImage"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            tools:src="@drawable/ic_launcher_background"
-    />
+            tools:src="@drawable/ic_launcher_background" />
 
 
     <TextView
             android:id="@+id/pokemonWeight"
             android:layout_width="match_parent"
-            android:gravity="center"
             android:layout_height="30dp"
-            tools:text="weight is : sdsd30"
-            android:textStyle="normal"
-            android:textSize="20sp"
-            android:fontFamily="sans-serif"
             android:layout_marginTop="20dp"
-    />
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            tools:text="weight is : sdsd30" />
 
     <TextView
             android:id="@+id/pokemonHeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            tools:text="heigt is : 222"
-            android:textStyle="normal"
-            android:textSize="20sp"
             android:layout_marginTop="20dp"
             android:fontFamily="sans-serif"
-    />
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            tools:text="heigt is : 222" />
 
 
 </LinearLayout>

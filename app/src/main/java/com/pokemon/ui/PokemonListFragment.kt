@@ -14,6 +14,7 @@ import com.pokemon.POKEMON_DETAILS_KEY
 import com.pokemon.R
 import com.pokemon.data.PokemonResponse
 import com.pokemon.ui.viewstate.ServerDataState
+import com.pokemon.util.EspressoIdlingResource
 import com.pokemon.viewmodel.PokeMonListViewModel
 import com.pokemon.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_pokemon_list.*
@@ -34,7 +35,7 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         (activity?.applicationContext as BaseApp).appComponent
             .newPokemonLisComponent().inject(this)
@@ -75,16 +76,19 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
                     loading = false
                     pokemonListAdapter.removeLoadingData()
                     setData(it.item as PokemonResponse?)
+                    EspressoIdlingResource.decrement()
                 }
                 is ServerDataState.Error -> {
                     loading = false
                     pokemonListAdapter.removeLoadingData()
                     setError(it.message)
+                    EspressoIdlingResource.decrement()
                 }
 
                 is ServerDataState.Loading ->{
                     loading = true
                     pokemonListAdapter.addLoadingData()
+                    EspressoIdlingResource.increment()
                 }
             }
 
