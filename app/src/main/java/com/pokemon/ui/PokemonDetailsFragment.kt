@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.pokemon.BaseApp
 import com.pokemon.POKEMON_DETAILS_KEY
 import com.pokemon.R
@@ -27,7 +27,7 @@ class PokemonDetailsFragment : BaseFragment() {
         (activity?.applicationContext as BaseApp).appComponent
             .newPokemonDetailsComponent().inject(this)
         pokemonDetailsViewModel =
-            ViewModelProviders.of(this, viewModelFactory)[PokemonDetailsViewModel::class.java]
+            ViewModelProvider(this, viewModelFactory)[PokemonDetailsViewModel::class.java]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

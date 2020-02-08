@@ -5,20 +5,18 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pokemon.BaseApp
 import com.pokemon.POKEMON_DETAILS_KEY
 import com.pokemon.R
-import com.pokemon.data.entity.PokemonResponse
-import com.pokemon.domain.model.Pokemon
 import com.pokemon.ui.model.PokemonModel
-import com.pokemon.ui.viewstate.ServerDataState
-import com.pokemon.util.EspressoIdlingResource
 import com.pokemon.ui.viewmodel.PokeMonListViewModel
 import com.pokemon.ui.viewmodel.ViewModelFactory
+import com.pokemon.ui.viewstate.ServerDataState
+import com.pokemon.util.EspressoIdlingResource
 import kotlinx.android.synthetic.main.fragment_pokemon_list.*
 import javax.inject.Inject
 
@@ -42,7 +40,7 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
         (activity?.applicationContext as BaseApp).appComponent
             .newPokemonLisComponent().inject(this)
         pokeMonListViewModel =
-            ViewModelProviders.of(this, viewModelFactory)[PokeMonListViewModel::class.java]
+            ViewModelProvider(this, viewModelFactory)[PokeMonListViewModel::class.java]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,7 +85,7 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
                     EspressoIdlingResource.decrement()
                 }
 
-                is ServerDataState.Loading ->{
+                is ServerDataState.Loading -> {
                     loading = true
                     pokemonListAdapter.addLoadingData()
                     EspressoIdlingResource.increment()
