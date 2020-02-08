@@ -7,16 +7,17 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.pokemon.R
-import com.pokemon.data.Pokemon
+import com.pokemon.data.entity.PokemonEntity
+import com.pokemon.domain.model.Pokemon
+import com.pokemon.ui.model.PokemonModel
 import kotlinx.android.synthetic.main.item_list.view.*
 import kotlinx.android.synthetic.main.item_loading.view.*
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 class PokemonListAdapter @Inject constructor() :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val pokemonList = ArrayList<Pokemon>()
+    private val pokemonList = ArrayList<PokemonModel>()
     lateinit var listener: OnClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -64,13 +65,19 @@ class PokemonListAdapter @Inject constructor() :
         val progressBar:ProgressBar = view.progressBar
     }
 
-    fun addPokmons(list: ArrayList<Pokemon>) {
+    fun addPokmons(list: ArrayList<PokemonModel>) {
         pokemonList.addAll(list)
         notifyDataSetChanged()
     }
 
     fun addLoadingData(){
-        pokemonList.add(Pokemon("loading","fake",1));
+        pokemonList.add(
+            PokemonModel(
+                "loading",
+                "fake",
+                1
+            )
+        );
         notifyItemInserted(pokemonList.size - 1);
     }
 

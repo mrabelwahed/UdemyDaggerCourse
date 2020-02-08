@@ -1,4 +1,4 @@
-package com.pokemon.viewmodel
+package com.pokemon.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

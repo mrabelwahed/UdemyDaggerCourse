@@ -9,10 +9,10 @@ import androidx.lifecycle.ViewModelProviders
 import com.pokemon.BaseApp
 import com.pokemon.POKEMON_DETAILS_KEY
 import com.pokemon.R
-import com.pokemon.data.PokemonDetails
+import com.pokemon.ui.model.PokemonDetailsModel
+import com.pokemon.ui.viewmodel.PokemonDetailsViewModel
+import com.pokemon.ui.viewmodel.ViewModelFactory
 import com.pokemon.ui.viewstate.ServerDataState
-import com.pokemon.viewmodel.PokemonDetailsViewModel
-import com.pokemon.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_pokemon_details.*
 import javax.inject.Inject
@@ -26,7 +26,8 @@ class PokemonDetailsFragment : BaseFragment() {
         super.onAttach(context)
         (activity?.applicationContext as BaseApp).appComponent
             .newPokemonDetailsComponent().inject(this)
-        pokemonDetailsViewModel = ViewModelProviders.of(this, viewModelFactory)[PokemonDetailsViewModel::class.java]
+        pokemonDetailsViewModel =
+            ViewModelProviders.of(this, viewModelFactory)[PokemonDetailsViewModel::class.java]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,19 +46,19 @@ class PokemonDetailsFragment : BaseFragment() {
     }
 
     fun observePokemonDetails() {
-        pokemonDetailsViewModel.getLivePokemonDetails().observe(this, Observer {
-            when(it){
-                is ServerDataState.Success<*> -> setData(it.item as PokemonDetails)
+        pokemonDetailsViewModel.livePokemonDetails.observe(this, Observer {
+            when (it) {
+                is ServerDataState.Success<*> -> setData(it.item as PokemonDetailsModel)
                 is ServerDataState.Error -> setError(it.message)
             }
         })
     }
 
     private fun setError(message: String?) {
-     Log.e("Details-error",message)
+        Log.e("Details-error", message)
     }
 
-    fun setData(response: PokemonDetails?) {
+    fun setData(response: PokemonDetailsModel?) {
         Picasso.get().load(response?.sprites?.front_default).into(pokemonImage)
         pokemonWeight.text = "Weight is :".plus(response?.weight.toString())
         pokemonHeight.text = "Height is :".plus(response?.height.toString())

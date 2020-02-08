@@ -3,7 +3,7 @@ package com.pokemon.di.module
 import com.pokemon.BASE_URL
 import com.pokemon.TIMEOUT_REQUEST
 import com.pokemon.di.scope.AppScope
-import com.pokemon.network.PokemonApi
+import com.pokemon.data.network.PokemonApi
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

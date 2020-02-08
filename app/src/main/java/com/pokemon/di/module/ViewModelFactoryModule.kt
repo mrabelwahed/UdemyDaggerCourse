@@ -1,7 +1,7 @@
 package com.pokemon.di.module
 
 import androidx.lifecycle.ViewModelProvider
-import com.pokemon.viewmodel.ViewModelFactory
+import com.pokemon.ui.viewmodel.ViewModelFactory
 import dagger.Binds
 import dagger.Module
 

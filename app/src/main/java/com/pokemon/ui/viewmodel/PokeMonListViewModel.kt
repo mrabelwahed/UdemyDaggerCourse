@@ -1,14 +1,15 @@
-package com.pokemon.viewmodel
+package com.pokemon.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pokemon.domain.PokemonUsecase
+import com.pokemon.domain.interactor.GetPokemonListUseCase
+import com.pokemon.ui.mapper.PokemonModelMapper
 import com.pokemon.ui.viewstate.ServerDataState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.processors.PublishProcessor
 import javax.inject.Inject
 
-class PokeMonListViewModel @Inject constructor(private val usecase: PokemonUsecase) :
+class PokeMonListViewModel @Inject constructor(private val getPokemonListUseCase: GetPokemonListUseCase) :
     BaseViewModel() {
 
     val paginator = PublishProcessor.create<Int>()
@@ -21,10 +22,10 @@ class PokeMonListViewModel @Inject constructor(private val usecase: PokemonUseca
     fun initPagination() {
         val disposable = paginator
             .doOnNext { viewState.value = ServerDataState.Loading }
-            .concatMap { offset -> usecase.getPokemonList(offset) }
+            .concatMap { offset -> getPokemonListUseCase.execute(offset) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { res -> viewState.value = ServerDataState.Success(res) },
+                { res -> viewState.value = ServerDataState.Success(PokemonModelMapper.transform(res)) },
                 { error -> viewState.value = ServerDataState.Error(error.message) }
             )
 

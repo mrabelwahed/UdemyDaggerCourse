@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pokemon.BaseApp
 import com.pokemon.POKEMON_DETAILS_KEY
 import com.pokemon.R
-import com.pokemon.data.PokemonResponse
+import com.pokemon.data.entity.PokemonResponse
+import com.pokemon.domain.model.Pokemon
+import com.pokemon.ui.model.PokemonModel
 import com.pokemon.ui.viewstate.ServerDataState
 import com.pokemon.util.EspressoIdlingResource
-import com.pokemon.viewmodel.PokeMonListViewModel
-import com.pokemon.viewmodel.ViewModelFactory
+import com.pokemon.ui.viewmodel.PokeMonListViewModel
+import com.pokemon.ui.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_pokemon_list.*
 import javax.inject.Inject
 
@@ -59,8 +61,8 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
 
     }
 
-    private fun setData(response: PokemonResponse?) {
-        response?.results?.let { pokemonListAdapter.addPokmons(it) }
+    private fun setData(response: ArrayList<PokemonModel>) {
+        pokemonListAdapter.addPokmons(response)
     }
 
 
@@ -75,7 +77,7 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
                 is ServerDataState.Success<*> -> {
                     loading = false
                     pokemonListAdapter.removeLoadingData()
-                    setData(it.item as PokemonResponse?)
+                    setData(it.item as ArrayList<PokemonModel>)
                     EspressoIdlingResource.decrement()
                 }
                 is ServerDataState.Error -> {

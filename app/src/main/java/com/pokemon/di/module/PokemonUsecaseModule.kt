@@ -1,8 +1,9 @@
 package com.pokemon.di.module
 
 import com.pokemon.di.scope.AppScope
-import com.pokemon.domain.PokemonUsecase
-import com.pokemon.repository.PokemonRepository
+import com.pokemon.data.repository.PokemonDataRepository
+import com.pokemon.domain.interactor.GetPokemonDetailsUseCase
+import com.pokemon.domain.interactor.GetPokemonListUseCase
 import dagger.Module
 import dagger.Provides
 
@@ -10,5 +11,11 @@ import dagger.Provides
 class PokemonUsecaseModule {
     @AppScope
     @Provides
-    fun provideFeedUseCase(repository :PokemonRepository) = PokemonUsecase(repository)
+    fun providePokemonListCase(repository : PokemonDataRepository) =
+        GetPokemonListUseCase(repository)
+
+    @AppScope
+    @Provides
+    fun providePokemonDetailsUseCase(repository : PokemonDataRepository) =
+        GetPokemonDetailsUseCase(repository)
 }

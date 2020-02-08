@@ -1,8 +1,8 @@
 package com.pokemon.di.module
 
 import com.pokemon.di.scope.AppScope
-import com.pokemon.network.PokemonApi
-import com.pokemon.repository.PokemonRepository
+import com.pokemon.data.network.PokemonApi
+import com.pokemon.data.repository.PokemonDataRepository
 import dagger.Module
 import dagger.Provides
 
@@ -10,5 +10,6 @@ import dagger.Provides
 class RepositoryModule {
     @AppScope
     @Provides
-    fun provideFeedRepository(api: PokemonApi) = PokemonRepository(api)
+    fun provideFeedRepository(api: PokemonApi) =
+        PokemonDataRepository(api)
 }
