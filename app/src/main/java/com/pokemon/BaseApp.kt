@@ -8,12 +8,8 @@ import com.pokemon.di.module.PokemonUsecaseModule
 import com.pokemon.di.module.RepositoryModule
 
 class BaseApp : Application() {
-    lateinit var appComponent: AppComponent
+     val appComponent: AppComponent by lazy { initDagger() }
 
-    override fun onCreate() {
-        super.onCreate()
-        this.appComponent = this.initDagger()
-    }
 
     private fun initDagger()  = DaggerAppComponent.builder()
         .networkModule(NetworkModule())

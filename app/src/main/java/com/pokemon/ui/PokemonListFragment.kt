@@ -29,7 +29,7 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
     private var loading = false
     private lateinit var linearLayoutManager: LinearLayoutManager
     private val VISIBLE_THRESHOLD = 1
-    private var offest = 0
+    private var offset = 0
     @Inject
     lateinit var pokemonListAdapter: PokemonListAdapter
     @Inject
@@ -118,8 +118,8 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
                 totalItemCount = linearLayoutManager.itemCount
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
                 if (!loading && totalItemCount <= lastVisibleItem + VISIBLE_THRESHOLD) {
-                    offest += 20
-                    pokeMonListViewModel.nextPage(offest)
+                    offset += 20
+                    pokeMonListViewModel.nextPage(offset)
                     loading = true
                 }
             }
