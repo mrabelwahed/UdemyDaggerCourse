@@ -1,6 +1,5 @@
 package com.pokemon.data.entity
 
-import com.pokemon.data.entity.PokemonEntity
 
 data class PokemonResponse (
     val count:Int ,

@@ -2,42 +2,36 @@ package com.pokemon.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.pokemon.data.repository.PokemonDataRepository
 import com.pokemon.domain.interactor.GetPokemonListUseCase
 import com.pokemon.ui.mapper.PokemonModelMapper
-import com.pokemon.ui.viewstate.ServerDataState
+import com.pokemon.ui.viewstate.DataState
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.processors.PublishProcessor
-import javax.inject.Inject
 
-class PokeMonListViewModel @Inject constructor(private val getPokemonListUseCase: GetPokemonListUseCase) :
-    BaseViewModel() {
+class PokeMonListViewModel: BaseViewModel() {
+    var getPokemonListUseCase: GetPokemonListUseCase
 
-    val paginator = PublishProcessor.create<Int>()
+    init {
+        val repository = PokemonDataRepository()
+        getPokemonListUseCase = GetPokemonListUseCase(repository)
+    }
+
     private var offset = 0
-    private val viewState = MutableLiveData<ServerDataState>()
-    val livePokemonData: LiveData<ServerDataState>
+    private val viewState = MutableLiveData<DataState>()
+    val livePokemonData: LiveData<DataState>
         get() = viewState
 
 
     fun initPagination() {
-        val disposable = paginator
-            .doOnNext { viewState.value = ServerDataState.Loading }
-            .concatMap { offset -> getPokemonListUseCase.execute(offset) }
+        val disposable = getPokemonListUseCase.execute(offset)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { res -> viewState.value = ServerDataState.Success(PokemonModelMapper.transform(res)) },
-                { error -> viewState.value = ServerDataState.Error(error.message) }
+                { res ->
+                    viewState.value = DataState.Success(PokemonModelMapper.transform(res))
+                },
+                { error -> viewState.value = DataState.Error(error.message) }
             )
-
         compositeDisposable.add(disposable)
-        paginator.onNext(offset)
     }
-
-
-    fun nextPage(offset: Int) {
-        this.offset = offset
-        paginator.onNext(offset)
-    }
-
 
 }

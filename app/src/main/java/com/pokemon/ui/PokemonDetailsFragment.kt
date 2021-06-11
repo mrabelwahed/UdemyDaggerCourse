@@ -6,28 +6,21 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.pokemon.BaseApp
 import com.pokemon.POKEMON_DETAILS_KEY
 import com.pokemon.R
 import com.pokemon.ui.model.PokemonDetailsModel
 import com.pokemon.ui.viewmodel.PokemonDetailsViewModel
-import com.pokemon.ui.viewmodel.ViewModelFactory
-import com.pokemon.ui.viewstate.ServerDataState
+import com.pokemon.ui.viewstate.DataState
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_pokemon_details.*
-import javax.inject.Inject
 
 class PokemonDetailsFragment : BaseFragment() {
     private lateinit var pokemonDetailsViewModel: PokemonDetailsViewModel
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        (activity?.applicationContext as BaseApp).appComponent
-            .newPokemonDetailsComponent().inject(this)
-        pokemonDetailsViewModel =
-            ViewModelProvider(this, viewModelFactory)[PokemonDetailsViewModel::class.java]
+        pokemonDetailsViewModel = ViewModelProvider(this).get(PokemonDetailsViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,8 +41,8 @@ class PokemonDetailsFragment : BaseFragment() {
     fun observePokemonDetails() {
         pokemonDetailsViewModel.livePokemonDetails.observe(this, Observer {
             when (it) {
-                is ServerDataState.Success<*> -> setData(it.item as PokemonDetailsModel)
-                is ServerDataState.Error -> setError(it.message)
+                is DataState.Success<*> -> setData(it.item as PokemonDetailsModel)
+                is DataState.Error -> setError(it.message)
             }
         })
     }
