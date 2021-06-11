@@ -1,5 +1,5 @@
 object Versions {
-    val KOTLIN = "1.3.20"
+    val KOTLIN = "1.3.72"
     val COMPILE_SDK = 28
     val MIN_SDK_VERSION = 15
     val TARGET_SDK_VERSION = 28
@@ -8,8 +8,8 @@ object Versions {
     val RXJAVA_VERSION = "2.2.12"
     val RX_ANDROID = "2.1.1"
     val RX_RETROFIT_ADAPTER = "2.6.1"
-    val DAGGER_VERSION = "2.22"
-    val DAGGER_COMPILER = "2.22"
+    val DAGGER_VERSION = "2.37"
+    val DAGGER_COMPILER = "2.37"
     val RETROFIT_VERSION = "2.6.1"
     val GSON_VERSION = "2.8.5"
     val GSON_CONVERTER = "2.6.1"
@@ -24,7 +24,6 @@ object Versions {
     val APP_COMPAT_VERSION = "1.1.0"
     val CORE_KTX = "1.1.0"
     val ARCH_CORE_TESTING_VER = "2.0.0"
-    val TEST_RUNNER_VER = "1.1.1"
     val RULES_VER = "1.1.1"
     val TRUTH_VER = "1.1.0"
     val JUNIT_EXT_VER = "1.1.0"
