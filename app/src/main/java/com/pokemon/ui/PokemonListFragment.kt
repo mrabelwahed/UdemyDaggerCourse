@@ -4,28 +4,27 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.pokemon.POKEMON_DETAILS_KEY
 import com.pokemon.R
+import com.pokemon.common.navigation.Screen
 import com.pokemon.ui.model.PokemonModel
 import com.pokemon.ui.viewmodel.PokeMonListViewModel
 import com.pokemon.ui.viewstate.DataState
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_pokemon_list.*
 
 
 class PokemonListFragment : BaseFragment(), OnClickListener {
-    private val pokemonDetailsFragment = PokemonDetailsFragment()
-    private lateinit var pokeMonListViewModel: PokeMonListViewModel
+    val pokeMonListViewModel : PokeMonListViewModel by viewModels()
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var pokemonListAdapter: PokemonListAdapter
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        pokeMonListViewModel = ViewModelProvider(this).get(PokeMonListViewModel::class.java)
-    }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,11 +49,11 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
 
 
     override fun onClick(position: Int, view: View) {
-        getPokemonDetails(position + 1)
+        appNavigator.navigateTo(Screen.POKEMON_DETAILS, position + 1)
     }
 
     private fun observePokemonList() {
-        pokeMonListViewModel.livePokemonData.observe(this, Observer {
+        pokeMonListViewModel.livePokemonData.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is DataState.Success<*> -> {
                     setData(it.item as ArrayList<PokemonModel>)
@@ -79,22 +78,8 @@ class PokemonListFragment : BaseFragment(), OnClickListener {
 
     private fun initUI() {
         setupView()
-        pokeMonListViewModel.initPagination()
+        pokeMonListViewModel.getPokemons()
         observePokemonList()
     }
 
-
-
-
-    private fun getPokemonDetails(id: Int) {
-        val bundle = Bundle()
-        bundle.putInt(POKEMON_DETAILS_KEY, id)
-        pokemonDetailsFragment.arguments = bundle
-
-        (activity as BaseActivity).supportFragmentManager.beginTransaction()
-            .replace(R.id.container, pokemonDetailsFragment)
-            .addToBackStack(null)
-            .commit()
-
-    }
 }

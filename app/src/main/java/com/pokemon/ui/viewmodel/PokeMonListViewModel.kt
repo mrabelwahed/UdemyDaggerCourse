@@ -6,15 +6,12 @@ import com.pokemon.data.repository.PokemonDataRepository
 import com.pokemon.domain.interactor.GetPokemonListUseCase
 import com.pokemon.ui.mapper.PokemonModelMapper
 import com.pokemon.ui.viewstate.DataState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
+import javax.inject.Inject
 
-class PokeMonListViewModel: BaseViewModel() {
-    var getPokemonListUseCase: GetPokemonListUseCase
-
-    init {
-        val repository = PokemonDataRepository()
-        getPokemonListUseCase = GetPokemonListUseCase(repository)
-    }
+@HiltViewModel
+class PokeMonListViewModel @Inject constructor( private val getPokemonListUseCase: GetPokemonListUseCase): BaseViewModel() {
 
     private var offset = 0
     private val viewState = MutableLiveData<DataState>()
@@ -22,7 +19,7 @@ class PokeMonListViewModel: BaseViewModel() {
         get() = viewState
 
 
-    fun initPagination() {
+    fun getPokemons() {
         val disposable = getPokemonListUseCase.execute(offset)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(

@@ -6,13 +6,13 @@ import com.pokemon.data.repository.PokemonDataRepository
 import com.pokemon.domain.interactor.GetPokemonDetailsUseCase
 import com.pokemon.ui.mapper.PokemonDetailsModelMapper
 import com.pokemon.ui.viewstate.DataState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class PokemonDetailsViewModel : BaseViewModel() {
-    var getPokemonDetailsUseCase : GetPokemonDetailsUseCase
-    init {
-        val repository = PokemonDataRepository()
-        getPokemonDetailsUseCase = GetPokemonDetailsUseCase(repository)
-    }
+@HiltViewModel
+class PokemonDetailsViewModel @Inject constructor(private val getPokemonDetailsUseCase: GetPokemonDetailsUseCase) : BaseViewModel() {
+
+
     private val viewState = MutableLiveData<DataState>()
     val livePokemonDetails: LiveData<DataState>
         get() = viewState

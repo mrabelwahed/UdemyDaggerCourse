@@ -6,8 +6,9 @@ import com.pokemon.domain.repository.PokemonRepository
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class GetPokemonDetailsUseCase(private val pokemonRepository: PokemonRepository) :
+class GetPokemonDetailsUseCase @Inject constructor(private val pokemonRepository: PokemonRepository) :
     UseCase<Int, PokemonDetails> {
     override fun execute(param: Int): Flowable<PokemonDetails> {
         return pokemonRepository.getPokemonDetails(param)

@@ -1,5 +1,5 @@
 object Versions {
-    val KOTLIN = "1.3.72"
+    val KOTLIN = "1.5.21"
     val COMPILE_SDK = 28
     val MIN_SDK_VERSION = 15
     val TARGET_SDK_VERSION = 28
@@ -19,7 +19,7 @@ object Versions {
     val RECYCLERVIEW_VERSION = "1.1.0"
     val PICASSO_VERSION = "2.71828"
     val CONSTRAINT_LAYOUT = "1.1.3"
-    val ANDROID_GRADLE_VERSION = "3.3.1"
+    val ANDROID_GRADLE_VERSION = "4.0.1"
     val ESPRESSO_VERSION = "3.1.1"
     val APP_COMPAT_VERSION = "1.1.0"
     val CORE_KTX = "1.1.0"
